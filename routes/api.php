@@ -5,11 +5,13 @@ use App\Http\Controllers\ApiComplaintController;
 use App\Http\Controllers\ApiCoverLetterController;
 use App\Http\Controllers\ApiDonationBillController;
 use App\Http\Controllers\ApiDonationController;
+use App\Http\Controllers\ApiHouseController;
 use App\Http\Controllers\ApiImportantNumberController;
 use App\Http\Controllers\ApiNoticeController;
 use App\Http\Controllers\ApiPanicButtonController;
 use App\Http\Controllers\ApiPollingController;
 use App\Http\Controllers\ApiProfileController;
+use App\Http\Controllers\ApiUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +38,17 @@ Route::group(['prefix' => 'v1', 'middleware' => 'api'], function () {
 
     Route::middleware('jwt.auth')->group(function () {
         Route::post('logout', [ApiAuthenticationController::class, 'logout']);
+        // users
+        Route::get('users', [ApiUserController::class, 'index']);
+        Route::post('users', [ApiUserController::class, 'store']);
+        Route::get('users/{user}/edit', [ApiUserController::class, 'edit']);
+        Route::put('users/{user}', [ApiUserController::class, 'update']);
+        Route::delete('users', [ApiUserController::class, 'delete']);
+        // houses
+        Route::get('houses', [ApiHouseController::class, 'index']);
+        Route::post('houses', [ApiHouseController::class, 'store']);
+        Route::get('houses/{house}/edit', [ApiHouseController::class, 'edit']);
+        Route::put('houses/{house}', [ApiHouseController::class, 'update']);
         // profile
         Route::get('profile', [ApiProfileController::class, 'getProfile']);
         Route::post('update-profile', [ApiProfileController::class, 'updateProfile']);

@@ -6,9 +6,8 @@ use App\Models\ActivityHistory;
 use App\Models\FamilyCard;
 use App\Models\House;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class HouseController extends Controller
+class ApiHouseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,13 +18,10 @@ class HouseController extends Controller
             $q->where('status', 'aktif');
         })->get();
         $empty_house = House::whereDoesntHave('family_card')->get();
-        return view('dashboard.house.index', ['house' => $house, 'empty_house' => $empty_house]);
-    }
-
-
-    public function create()
-    {
-        //
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mendapatkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'houses', 'empty_house'), 200);
     }
 
     /**
@@ -35,7 +31,10 @@ class HouseController extends Controller
     {
         $house_number_unavailable = House::where('house_number', request('house_number'))->first();
         if ($house_number_unavailable != null) {
-            return redirect()->back()->with("ERR", "Nomor rumah tidak dapat digunakan");
+            $status = 'success';
+            $status_code = 400;
+            $message = 'nomor rumah tidak dapat digunakan';
+            return response()->json(compact('status', 'status_code', 'message'), 400);
         }
         $house = House::create([
             'house_number' => request('house_number'),
@@ -50,29 +49,26 @@ class HouseController extends Controller
         }
 
         ActivityHistory::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => auth('api')->user()->id,
             'description' => 'Tambah rumah'
         ]);
-
-        return redirect()->back()->with("OK", "Berhasil menambahkan data");
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil membuat data';
+        return response()->json(compact('status', 'status_code', 'message', 'houses'), 200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(House $house)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($rumah)
     {
-        $house = House::findOrFail($rumah);
 
-        return $house;
+        $house = House::findOrFail($rumah);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mendapatkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'house'), 200);
     }
 
     public function update(Request $request, House $house)
@@ -80,20 +76,25 @@ class HouseController extends Controller
         $house_number_unavailable = House::where('house_number', request('house_number'))->first();
         if ($house_number_unavailable != null) {
             if ($house->id != $house_number_unavailable->id) {
-                return redirect()->back()->with("ERR", "Nomor rumah tidak dapat digunakan");
+
+                $status = 'success';
+                $status_code = 400;
+                $message = 'nomor rumah tidak dapat digunakan';
+                return response()->json(compact('status', 'status_code', 'message'), 400);
             }
         }
-        ActivityHistory::create([
-            'user_id' => Auth::user()->id,
-            'description' => 'Ubah rumah'
-        ]);
-
         $house->update([
             'house_number'  => request('house_number'),
             'longitude' => request('longitude'),
             'latitude' => request('latitude')
         ]);
-
-        return redirect()->back()->with("OK", "Berhasil mengubah data");
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Ubah rumah'
+        ]);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mendapatkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'house'), 200);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\FamilyCard;
 use App\Models\FamilyMember;
 use App\Models\OtpCode;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -288,42 +289,59 @@ class ApiAuthenticationController extends Controller
             $message = 'Semua input wajib diisi';
             return response()->json(compact('status', 'status_code', 'message'), 400);
         } else {
-            $user = User::where('phone_number', request('phone_number'))->first();
+            $user = User::where('phone_number', request('phone_number'))->orWhere('email', request('phone_number'))->first();
             if ($user == null) {
                 $status = 'error';
                 $status_code = 404;
-                $message = 'Nomor telepon yang anda masukkan tidak valid';
+                $message = 'Nomor telepon / email yang anda masukkan tidak valid';
                 return response()->json(compact('status', 'status_code', 'message'), 404);
             } else {
-
-                $credentials = ['phone_number' => $user->phone_number, 'password' => request('password')];
-                if (!$token = auth('api')->attempt($credentials)) {
-                    $status = 'error';
-                    $status_code = 401;
-                    $message = 'Password yang anda masukkan tidak valid';
-                    return response()->json(compact('status', 'status_code', 'message'), 401);
+                $input = request('phone_number');
+                if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
+                    $credentials = [
+                        'phone_number' => $user->email,
+                        'password' => request('password')
+                    ];
                 } else {
-                    ActivityHistory::create([
-                        'rukun_tetangga_id' => $user->family_member->family_card->house->rukun_tetangga_id,
-                        'user_id' => $user->id,
-                        'description' => 'Login warga'
-                    ]);
-                    $user->update([
-                        'fcm_token' => request('fcm_token')
-                    ]);
-                    $this->setFcmToken($user->id);
-                    $token = auth('api')->fromUser($user);
-                    $status = 'success';
-                    $status_code = 200;
-                    $message = 'Berhasil login';
-                    $data = ['user' => $user];
-                    $token_type = 'bearer';
-                    $expires_in = auth('api')->factory()->getTTL() * 60;
-                    return response()->json(compact('status', 'status_code', 'message', 'data', 'token', 'token_type', 'expires_in'), 200);
+                    $credentials = ['phone_number' => $user->phone_number, 'password' => request('password')];
                 }
+
+                ActivityHistory::create([
+                    'rukun_tetangga_id' => $user->family_member->family_card->house->rukun_tetangga_id,
+                    'user_id' => $user->id,
+                    'description' => 'Login warga'
+                ]);
+
+                $user->update([
+                    'fcm_token' => request('fcm_token')
+                ]);
+                // $this->setFcmToken($user->id);
+                $token = auth('api')->fromUser($user);
+
+                $status = 'success';
+                $status_code = 200;
+                $message = 'Berhasil login';
+                $data = ['user' => $user];
+                $token_type = 'bearer';
+                $tokenTTL = auth('api')->factory()->getTTL() * 60;
+                $expires_in = Carbon::now()->addSeconds($tokenTTL);
+                return response()->json(compact('status', 'status_code', 'message', 'data', 'token', 'token_type', 'expires_in'), 200);
             }
         }
     }
+
+    // public function loginAdmin()
+    // {
+    //     if (request('email') == null || request('email') == '' || request('password') == null || request('password') == '') {
+    //         $status = 'error';
+    //         $status_code = 400;
+    //         $message = 'Semua input wajib diisi';
+    //         return response()->json(compact('status', 'status_code', 'message'), 400);
+    //     } else {
+
+    //         $user = User::where('email', request('email'))->orWhere('phone_number', request('email'))->first();
+    //     }
+    // }
 
     public function logout()
     {
@@ -335,7 +353,7 @@ class ApiAuthenticationController extends Controller
             ]);
         }
         auth('api')->logout();
-        $this->destroyFcmToken($user->id);
+        // $this->destroyFcmToken($user->id);
 
         $status = 'success';
         $status_code = 200;

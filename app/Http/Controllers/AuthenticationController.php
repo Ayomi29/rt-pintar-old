@@ -20,7 +20,7 @@ class AuthenticationController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required'],
+            'phone_number' => ['required'],
             'password' => ['required'],
         ]);
         if (Auth::attempt($credentials)) {

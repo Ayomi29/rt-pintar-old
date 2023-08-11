@@ -20,10 +20,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Role::class);
     }
-    public function admin()
-    {
-        return $this->hasOne(Role::class)->where('role_name', 'admin');
-    }
+
 
     public function otp_code()
     {

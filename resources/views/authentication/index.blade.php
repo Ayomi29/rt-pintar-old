@@ -10,7 +10,7 @@
         content="Website RT Pintar merupakan website dashboard admin untuk mengelola data - data administrasi RT 15 Perumnas Balikpapan">
     <meta name="keywords"
         content="admin, website RT Pintar, dashboard RT Pintar, website rt pintar, dashboard rt pintar, RT 15 Perumnas Balikpapan, rt 15 perumnas balikpapan">
-    
+
     <title>RT Pintar | Login</title>
     <link href="/app-assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/app-assets/fonts/line-awesome/css/line-awesome.min.css">
@@ -51,16 +51,19 @@
                 <div class="col-5">
                     <div class="row h-100">
                         <div class="col-12 box-shadow-2 p-0 h-100">
-                            <div class="card border-grey border-lighten-3 mr-1 rounded-0 w-100 h-100" style="padding: 0% 17% 0% 17% !important;">
+                            <div class="card border-grey border-lighten-3 mr-1 rounded-0 w-100 h-100"
+                                style="padding: 0% 17% 0% 17% !important;">
                                 <div class="card-header border-0">
                                     <div class="card-title text-center">
-                                        <img src="app-assets/logo-01.jpg" alt="logo RT Pintar" width="250px" height="250px">
+                                        <img src="app-assets/logo-01.jpg" alt="logo RT Pintar" width="250px"
+                                            height="250px">
                                         </h6>
-                                        <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2"><span>RT Pintar</span>
+                                        <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
+                                            <span>RT Pintar</span>
                                     </div>
                                 </div>
                                 <div class="card-content" id="add-content">
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -70,7 +73,7 @@
         </div>
     </div>
 
-    
+
 
     <!-- ////////////////////////////////////////////////////////////////////////////-->
     <!-- BEGIN VENDOR JS-->
@@ -94,15 +97,17 @@
     @yield('script')
 
     <script>
-
         window.onload = content;
         $("#add-content").html('<div class="text-center mt-5" id="loading-content"><img src="app-assets/images/Spinner-1s-200px.gif" width="100px"></div>');
 
         function content() {
             $("#loading-content").remove();
-            $("#add-content").html('<div class="card-body pt-1" id="remove-content"><form class="form-horizontal form-simple" method="POST" action="/">@csrf<fieldset class="form-group position-relative has-icon-left mb-1"><input type="text" name="email" class="form-control" placeholder="Masukkan e-mail atau nomor telepon" autofocus required><div class="form-control-position"><i class="ft-user"></i></div></fieldset><fieldset class="form-group position-relative has-icon-left"><input type="password" name="password" class="form-control"id="user-password" placeholder="Masukkan password" minlength="6" required><div class="form-control-position"><i class="ft-lock"></i></div></fieldset><div class="form-group mb-3"><button type="submit" class="btn btn-block btn-info round box-shadow-3"><i class="ft-unlock"></i> Login</button></div><div class="form-group row"><div class="col-12 text-center"><p>Lupa password? <br> <a href="#" class="card-link" id="link" onClick="viaEmail()" style="color: #1E9FF2 !important;">Atur ulang password</a></p></div></div></form></div>');
+            $("#add-content").html('<div class="card-body pt-1" id="remove-content"><form class="form-horizontal form-simple" method="POST" action="/api/v1/login-warga">@csrf<fieldset class="form-group position-relative has-icon-left mb-1"><input type="text" name="phone_number" class="form-control" placeholder="Masukkan e-mail atau nomor telepon" autofocus required><div class="form-control-position"><i class="ft-user"></i></div></fieldset><fieldset class="form-group position-relative has-icon-left"><input type="password" name="password" class="form-control"id="user-password" placeholder="Masukkan password" minlength="6" required><div class="form-control-position"><i class="ft-lock"></i></div></fieldset><div class="form-group mb-3"><button type="submit" onClick="submitButton" class="btn btn-block btn-info round box-shadow-3"><i class="ft-unlock"></i> Login</button></div><div class="form-group row"><div class="col-12 text-center"><p>Lupa password? <br> <a href="#" class="card-link" id="link" onClick="viaEmail()" style="color: #1E9FF2 !important;">Atur ulang password</a></p></div></div></form></div>');
         }
-
+        
+        function submitButton() {
+            window.location.href = "/home";
+        };
         function viaEmail(){
             $("#remove-content").fadeOut(3000);
             $("#remove-content").remove();
@@ -171,14 +176,14 @@
         }
     </script>
     @if(session('OK'))
-        <script>
-            toastr.success('{{ session("OK") }}', 'Success!');
-        </script>
+    <script>
+        toastr.success('{{ session("OK") }}', 'Success!');
+    </script>
     @endif
     @if(session('ERR'))
-        <script>
-            toastr.error('{{ session("ERR") }}', 'Error!');
-        </script>
+    <script>
+        toastr.error('{{ session("ERR") }}', 'Error!');
+    </script>
     @endif
 </body>
 

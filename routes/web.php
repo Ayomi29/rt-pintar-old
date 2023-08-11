@@ -29,13 +29,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('', [AuthenticationController::class, 'index'])->name('login');
-Route::post('', [AuthenticationController::class, 'login']);
+Route::get('', [AuthenticationController::class, 'index']);
+// Route::post('', [AuthenticationController::class, 'login']);
 Route::post('send-email-otp-admin', [AuthenticationController::class, 'sendEmailOtpAdmin']);
 Route::post('confirm-otp-admin', [AuthenticationController::class, 'confirmOtpAdmin']);
 Route::post('change-password', [AuthenticationController::class, 'changePassword']);
 
-Route::middleware('auth')->group(function () {
+Route::middleware('jwt.auth')->group(function () {
     Route::post('logout', [AuthenticationController::class, 'logout']);
     Route::post('/dashboard-notification-read', [DashboardNotificationController::class, 'update']);
     // Home
@@ -44,19 +44,19 @@ Route::middleware('auth')->group(function () {
     Route::get('ubah-status-marker/{id}/edit', [HomeController::class, 'editStatus']);
     Route::post('ubah-status-marker/{id}', [HomeController::class, 'updateStatus']);
     // manajement data users
-    Route::resource('/users', UserController::class);
-    Route::resource('/roles', RoleController::class);
-    Route::resource('/data-rts', DataRtController::class);
-    Route::resource('/important-numbers', ImportantNumberController::class);
-    Route::resource('/houses', HouseController::class);
-    Route::resource('/family-cards', FamilyCardController::class);
-    Route::resource('/family-members', FamilyMemberController::class);
-    Route::resource('/notices', NoticeController::class);
-    Route::resource('/complaints', ComplaintController::class);
-    Route::resource('/pollings', PollingController::class);
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::get('/data-rts', [DataRtController::class, 'index']);
+    Route::get('/important-numbers', [ImportantNumberController::class, 'index']);
+    Route::get('/houses', [HouseController::class, 'index']);
+    Route::get('/family-cards', [FamilyCardController::class, 'index']);
+    Route::get('/family-members', [FamilyMemberController::class, 'index']);
+    Route::get('/notices', [NoticeController::class, 'index']);
+    Route::get('/complaints', [ComplaintController::class, 'index']);
+    Route::get('/pollings', [PollingController::class, 'index']);
     Route::post('/pollings/{polling}/start', [PollingController::class, 'startPolling']);
     Route::post('/pollings/{polling}/finish', [PollingController::class, 'finishPolling']);
-    Route::resource('/cover-letters', CoverLetterController::class);
-    Route::get('cv-download/', [CoverLetterController::class, 'download']);
-    Route::resource('/iurans', DonationController::class);
+    Route::get('/cover-letters', [CoverLetterController::class, 'index']);
+    Route::get('/cv-download', [CoverLetterController::class, 'download']);
+    Route::get('/iurans', [DonationController::class, 'index']);
 });
