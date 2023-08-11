@@ -215,7 +215,7 @@
                 url: "{{ route('roles.index') }}/" + id + "/edit"
             }).done(function (response)
             {
-                console.log(response);
+             
                 $("#editUserId").val(response.user_id);
                 $("#editRoleName").val(response.role_name);
                 $("#editForm").attr("action", "{{ route('roles.index') }}/" + id)

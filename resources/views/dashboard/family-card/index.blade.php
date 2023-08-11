@@ -241,7 +241,7 @@
                 url: "{{ route('family-cards.index') }}/" + id + "/edit"
             }).done(function (response)
             {
-                console.log(response);
+                
                 $("#editNumber").val(response.family_card_number);
                 $("#editStatus option[value=\"" + response.status + "\"]").attr("selected", true);
                 $("#editHouse option[value=\"" + response.house_id + "\"]");

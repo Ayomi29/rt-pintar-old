@@ -1,6 +1,6 @@
 @extends('layouts.index')
 
-@section('title', 'Manajemen Nomor Penting')
+@section('title', 'Manajemen Aduan Warga')
 
 @section('style')
 <style>
@@ -12,35 +12,24 @@
   .pagination .page-lin {
     color: blue !important;
   }
-  
-  .modal-md-lg{
-        max-width: 660px !important;
-    }
-    .map-on-modal{
-        height: 300px !important;
-    }
 </style>
 @endsection
 
 @section('content-header')
     <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-        <h3 class="content-header-title mb-0 d-inline-block">Manajemen Data Nomor Penting</h3>
+        <h3 class="content-header-title mb-0 d-inline-block">Manajemen Aduan Warga</h3>
         <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/home">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">Nomor Penting
+                    <li class="breadcrumb-item active">Aduan Warga
                     </li>
                 </ol>
             </div>
         </div>
     </div>
-    <div class="content-header-right col-md-6 col-12">
-        <div class="btn-group float-md-right">
-            <button class="btn btn-info rounded-0 mb-1" id="createButton" type="button">Tambah</button>
-        </div>
-    </div>
+    
 @endsection
 
 @section('content')
@@ -48,7 +37,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">List Nomor Penting</h4>
+                <h4 class="card-title">List Aduan Warga</h4>
                 <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                 <div class="heading-elements">
                     <ul class="list-inline mb-0">
@@ -61,34 +50,54 @@
             </div>
             <div class="card-content collapse show">
                 <div class="card-body card-dashboard">
-                    <table class="table table-striped table-bordered zero-configuration datatable">
+                    <table class="table table-striped table-bordered table-responsive zero-configuration datatable">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Pengguna</th>
-                                <th>Nomor Telepon</th>
+                                <th>Tanggal</th>
+                                <th>Nama Warga</th>
+                                <th>Judul</th>
+                                <th>Status</th>
                                 <th width="10%">Aksi</th>                                
                             </tr>
                         </thead>
                         <tbody>
                             @php $no = 1; @endphp
-                            @foreach($important_numbers as $item)
+                            @foreach($complaints as $item)
                                 <tr>
                                     <td class="text-capitalize">{{ $no++ }}</td>
-                                    <td class="text-capitalize">{{ $item->name }}</td>
-                                    <td class="text-capitalize">{{ $item->phone_number }}</td>
+                                    <td class="text-capitalize">{{ $item->created_at }}</td>
+                                    <td class="text-capitalize">{{ $item->user->family_member->family_member_name }}</td>
+                                    <td class="text-capitalize">{{ $item->title }}</td>
+                                    <td class="text-center">
+                                        @if($item->status == 'diposting')
+                                            <h4><span class="badge badge-success">Posting</span></h4>
+                                        @elseif ($item->status == 'diselidiki')
+                                            <h4><span class="badge badge-warning">Selidiki</span></h4>                                        
+                                        @elseif ($item->status == 'tolak')
+                                            <h4><span class="badge badge-danger">Tolak</span></h4>
+                                        @elseif ($item->status == 'selesai')
+                                            <h4><span class="badge badge-success">Selesai</span></h4>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
                                                 <i class="la la-cog"></i>
                                             </button>
-                                            <div class="dropdown-menu" style="min-width: 9rem !important">         
+                                            <div class="dropdown-menu" style="min-width: 9rem !important">
                                                 <button class="dropdown-item editButton" value="{{ $item->id }}">
                                                     <i class="la la-edit"></i> Ubah
                                                 </button>
+                                                @if ($item->complaint_document == true)
+                                                <a href="/complaints/{{ $item->id }}" class="dropdown-item">
+                                                    <i class="la la-image"></i> Dokumentasi
+                                                </a>
+                                                @endif
                                                 <button class="dropdown-item deleteButton" value="{{ $item->id }}">
                                                     <i class="la la-trash"></i> Hapus
                                                 </button>
+
                                             </div>
                                         </div>
                                     </td>
@@ -98,9 +107,11 @@
                         <tfooter>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Pengguna</th>
-                                <th>Nomor Telepon</th>
-                                <th width="10%">Aksi</th>                                                  
+                                <th>Tanggal</th>
+                                <th>Nama Warga</th>
+                                <th>Judul</th>
+                                <th>Status</th>
+                                <th width="10%">Aksi</th>                                
                             </tr>
                         </tfooter>
                     </table>
@@ -110,59 +121,38 @@
     </div>
 </div>
 
-<div class="modal fade" id="createModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info white">
-                <h4 class="modal-title white">Tambah Nomor Penting</h4>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <form action="/important-numbers" method="post">
-                <div class="modal-body">
-                    @csrf
-                    <div class="form-group">
-                        <label for="">Nama Pengguna</label>
-                        <input type="text" name="name" placeholder="Masukkan nama pengguna" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Nomor Telepon</label>
-                        <input type="text" name="phone_number" placeholder="Masukkan nomor telepon" class="form-control" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Kembali</button>
-                    <button type="submit" class="btn btn-outline-info">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="editModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info white">
-                <h4 class="modal-title white">Ubah Nomor Penting</h4>
+                <h4 class="modal-title white">Ubah Aduan Warga</h4>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="" id="editForm" method="post">
+            <form action="" id="editForm" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     @csrf
-                    @method("PUT")
-                    
+                    @method('PUT')
                     <div class="form-group">
-                        <label for="">Nama Pengguna</label>
-                        <input type="text" name="name" id="editName" placeholder="Masukkan nama pengguna" class="form-control" required>
+                        <label for="">Judul</label>
+                        <input type="text" name="title" placeholder="Masukkan judul" class="form-control" id="editTitle" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="">Nomor Telepon</label>
-                        <input type="text" name="phone_number" id="editPhone" placeholder="Masukkan nomor telepon" class="form-control" required>
+                        <label for="">Deskripsi</label>
+                        <textarea name="description" placeholder="Masukkan deskripsi" class="form-control" id="editDescription" readonly></textarea>
                     </div>
-                
+                    <div class="form-group">
+                        <label for="">Status</label>
+                        <select class="form-control" name="status" id="editStatus">
+                            <option value="" hidden>Pilih</option>
+                            <option value="selesai">Selesai</option>
+                            <option value="diselidiki">Selidiki</option>
+                            <option value="diposting">Posting</option>
+                            <option value="tolak">Tolak</option>
+                        </select>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Kembali</button>
@@ -193,17 +183,10 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('script')
     <script>
-       
-        
-        $(document).on("click", "#createButton", function ()
-        {
-            $("#createModal").modal();
-        });
 
         $(document).on("click", ".editButton", function()
         {
@@ -211,24 +194,26 @@
             $.ajax(
             {
                 method: "GET",
-                url: "{{ route('important-numbers.index') }}/" + id + "/edit"
+                // url: "{{ route('complaints.index') }}/" + id + "/edit"
+                url: "/complaints/" + id + "/edit"
             }).done(function (response)
             {
-                
-                $("#editName").val(response.name);
-                $("#editPhone").val(response.phone_number);
-
+                $("#editTitle").val(response.title);
+                $("#editDescription").val(response.description);
+                $("#editStatus option[value=\"" + response.status + "\"]").attr("selected", true);
+                // $("#editForm").attr("action", "{{ route('complaints.index') }}/" + id)
+                $("#editForm").attr("action", "/complaints/" + id)
                 $("#editModal").modal();
-                $("#editForm").attr("action", "{{ route('important-numbers.index') }}/" + id)
             })
         });
+        
+        
         $(document).on("click", ".deleteButton", function()
         {
             let id = $(this).val();
 
-            $("#deleteForm").attr("action", "{{ route('important-numbers.index') }}/" + id)
+            $("#deleteForm").attr("action", "/complaints/" + id)
             $("#deleteModal").modal();
         });
-
     </script>
 @endsection

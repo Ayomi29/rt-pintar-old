@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityHistory;
+use App\Models\Notice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NoticeController extends Controller
 {
@@ -11,54 +14,55 @@ class NoticeController extends Controller
      */
     public function index()
     {
-        //
+        $notices['notices'] = Notice::orderBy('id', 'asc')->get();
+        return view('dashboard.notice.index', $notices);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
+        Notice::create([
+            'title' => request('title'),
+            'description' => request('description'),
+            'status' => 'aktif'
+        ]);
+        ActivityHistory::create([
+            'user_id' => Auth::user()->id,
+            'description' => 'Membuat pengumuman'
+        ]);
+        return redirect()->back()->with('OK', "Berhasil menambahkan data");
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $notice = Notice::findOrFail($id);
+        return $notice;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Notice $notice)
     {
-        //
+        $notice->update([
+            'title' => request('title'),
+            'description' => request('description'),
+            'status' => request('status')
+        ]);
+        ActivityHistory::create([
+            'user_id' => Auth::user()->id,
+            'description' => 'Mengubah pengumuman'
+        ]);
+        return redirect()->back()->with('OK', "Berhasil mengubah data");
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Notice $notice)
     {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        ActivityHistory::create([
+            'user_id' => Auth::user()->id,
+            'description' => 'Menghapus pengumuman'
+        ]);
+        $notice->delete();
+
+        return redirect()->back()->with('OK', "Berhasil menghapus data");
     }
 }

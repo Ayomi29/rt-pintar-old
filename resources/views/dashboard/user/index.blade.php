@@ -265,7 +265,7 @@
                 url: "{{ route('users.index') }}/" + id + "/edit"
             }).done(function (response)
             {
-                console.log(response);
+                
                 $("#editPhoneNumber").val(response.phone_number);
                 $("#editPassword").val(response.password);
                 $("#editStatusAkun option[value=\"" + response.status + "\"]").attr("selected", true);

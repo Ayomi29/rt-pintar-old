@@ -118,7 +118,7 @@ class ApiAuthenticationController extends Controller
                 'code' => rand(100000, 999999)
             ]);
 
-            $this->twillioOtp($otp_code->code, "+" . request('phone_number'));
+            $this->whatsappOtp($otp_code->code, "+" . request('phone_number'));
 
 
             DashboardNotification::create([
@@ -156,8 +156,9 @@ class ApiAuthenticationController extends Controller
                 'user_id'  =>  $user->id,
                 'code' => rand(100000, 999999)
             ]);
+            $phone = request('phone_number');
 
-            $this->twillioOtp($otp_code->code, "+" . request('phone_number'));
+            $this->whatsappOtp($otp_code->code, $phone);
             $status = 'success';
             $status_code = 200;
             $message = 'Kode OTP telah dikirim';
@@ -166,28 +167,41 @@ class ApiAuthenticationController extends Controller
         }
     }
 
-    public function twillioOtp($otpCode, $phone)
+    public function whatsappOtp($otpCode, $phone)
     {
-        $message = "KODE OTP: " . $otpCode .  ". Silahkan masukkan kode OTP untuk masuk ke aplikasi.";
+        $message = "KODE OTP: " . $otpCode .  ". Silahkan masukkan kode OTP untuk proses verifikasi.";
+        $params = array(
+            'token' => '2s3pujktt46v0p5m',
+            'to' => $phone,
+            'body' => $message
+        );
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.ultramsg.com/instance56461/messages/chat",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => http_build_query($params),
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/x-www-form-urlencoded"
+            ),
+        ));
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://api.twilio.com/2010-04-01/Accounts/AC02ae4b65036d7f96d255e0b9a5707f97/Messages.json');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, [
-            "From" => "+1 205 953 8699",
-            "To" => $phone,
-            "Body" => $message
-        ]);
-        curl_setopt($ch, CURLOPT_USERPWD, 'AC02ae4b65036d7f96d255e0b9a5707f97' . ':' . '9245de74172812357be9549d325468be');
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
 
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
         }
-        curl_close($ch);
-
-        return $result;
     }
 
     // public function confirmOtpResetPassword()

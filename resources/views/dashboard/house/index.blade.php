@@ -250,7 +250,7 @@
                 url: "{{ route('houses.index') }}/" + id + "/edit"
             }).done(function (response)
             {
-                console.log(response);
+                
                 $("#editHouseNumber").val(response.house_number);
                 $("#editLongitude").val(response.longitude);
                 $("#editLatitude").val(response.latitude);

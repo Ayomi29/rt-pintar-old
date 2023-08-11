@@ -31,11 +31,11 @@ Route::group(['prefix' => 'v1', 'middleware' => 'api'], function () {
     Route::post('confirm-phone-number', [ApiAuthenticationController::class, 'confirmPhoneNumber']);
     Route::post('change-password', [ApiAuthenticationController::class, 'changePassword']);
     Route::post('confirm-otp-reset-password', [ApiAuthenticationController::class, 'confirmOtpResetPassword']);
+    Route::post('confirm-otp', [ApiAuthenticationController::class, 'confirmVerificationCode']);
+    Route::post('reconfirm-otp', [ApiAuthenticationController::class, 'resendCodeVerification']);
 
     Route::middleware('jwt.auth')->group(function () {
         Route::post('logout', [ApiAuthenticationController::class, 'logout']);
-        Route::post('confirm-otp', [ApiAuthenticationController::class, 'confirmVerificationCode']);
-        Route::post('reconfirm-otp', [ApiAuthenticationController::class, 'resendCodeVerification']);
         // profile
         Route::get('profile', [ApiProfileController::class, 'getProfile']);
         Route::post('update-profile', [ApiProfileController::class, 'updateProfile']);

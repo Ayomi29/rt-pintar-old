@@ -511,7 +511,7 @@
             url: "/get-data-panic-button"
         }).done(function (response)
         {
-            console.log(response);
+            
             if (showFormMarker != undefined) {
                 showFormMap.removeLayer(showFormMarker);
             };
@@ -569,7 +569,7 @@
             url: "/ubah-status-marker/" + id + "/edit"
         }).done(function (response)
         {
-            console.log(response);
+            
             $("#editStatus option[value=\"" + response.status + "\"]").attr("selected", true);
             $("#editStatusMarkerForm").attr("action", "/ubah-status-marker/" + id)
             $("#editStatusMarkerModal").modal();

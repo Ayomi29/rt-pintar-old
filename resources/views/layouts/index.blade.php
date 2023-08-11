@@ -433,7 +433,7 @@
                    _token : token 
                },
             }).done(function(response){
-                console.log(response);
+                
                 window.location = redirect;
             });
         });

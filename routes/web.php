@@ -54,6 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/notices', NoticeController::class);
     Route::resource('/complaints', ComplaintController::class);
     Route::resource('/pollings', PollingController::class);
+    Route::post('/pollings/{polling}/start', [PollingController::class, 'startPolling']);
+    Route::post('/pollings/{polling}/finish', [PollingController::class, 'finishPolling']);
     Route::resource('/cover-letters', CoverLetterController::class);
+    Route::get('cv-download/', [CoverLetterController::class, 'download']);
     Route::resource('/iurans', DonationController::class);
 });

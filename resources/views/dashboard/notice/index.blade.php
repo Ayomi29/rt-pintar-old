@@ -1,6 +1,6 @@
 @extends('layouts.index')
 
-@section('title', 'Manajemen Nomor Penting')
+@section('title', 'Manajemen Pengumuman')
 
 @section('style')
 <style>
@@ -24,13 +24,13 @@
 
 @section('content-header')
     <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-        <h3 class="content-header-title mb-0 d-inline-block">Manajemen Data Nomor Penting</h3>
+        <h3 class="content-header-title mb-0 d-inline-block">Manajemen Data Pengumuman</h3>
         <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/home">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">Nomor Penting
+                    <li class="breadcrumb-item active">Pengumuman
                     </li>
                 </ol>
             </div>
@@ -48,7 +48,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">List Nomor Penting</h4>
+                <h4 class="card-title">List Pengumuman</h4>
                 <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                 <div class="heading-elements">
                     <ul class="list-inline mb-0">
@@ -65,18 +65,26 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Pengguna</th>
-                                <th>Nomor Telepon</th>
+                                <th>Judul Pengumuman</th>
+                                <th>Kontent Pengumuman</th>
+                                <th>Status Pengumuman</th>
                                 <th width="10%">Aksi</th>                                
                             </tr>
                         </thead>
                         <tbody>
                             @php $no = 1; @endphp
-                            @foreach($important_numbers as $item)
+                            @foreach($notices as $item)
                                 <tr>
                                     <td class="text-capitalize">{{ $no++ }}</td>
-                                    <td class="text-capitalize">{{ $item->name }}</td>
-                                    <td class="text-capitalize">{{ $item->phone_number }}</td>
+                                    <td class="text-capitalize">{{ $item->title }}</td>
+                                    <td class="text-capitalize">{{ $item->description }}</td>
+                                    <td class="text-center">
+                                        @if($item->status == 'aktif')
+                                            <h4><span class="badge badge-success">Aktif</span></h4>
+                                        @else
+                                            <h4><span class="badge badge-danger">Tidak aktif</span></h4>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
@@ -98,8 +106,9 @@
                         <tfooter>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Pengguna</th>
-                                <th>Nomor Telepon</th>
+                                <th>Judul Pengumuman</th>
+                                <th>Kontent Pengumuman</th>
+                                <th>Status Pengumuman</th>
                                 <th width="10%">Aksi</th>                                                  
                             </tr>
                         </tfooter>
@@ -114,22 +123,23 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info white">
-                <h4 class="modal-title white">Tambah Nomor Penting</h4>
+                <h4 class="modal-title white">Tambah Pengumuman</h4>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="/important-numbers" method="post">
+            <form action="/notices" method="post">
                 <div class="modal-body">
                     @csrf
                     <div class="form-group">
-                        <label for="">Nama Pengguna</label>
-                        <input type="text" name="name" placeholder="Masukkan nama pengguna" class="form-control" required>
+                        <label for="">Judul Pengumuman</label>
+                        <input type="text" name="title" placeholder="Masukkan Judul Pengumuman" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="">Nomor Telepon</label>
-                        <input type="text" name="phone_number" placeholder="Masukkan nomor telepon" class="form-control" required>
+                        <label for="">Deskripsi</label>
+                        <input type="text" name="description" placeholder="Masukkan Deskripsi" class="form-control" required>
                     </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Kembali</button>
@@ -144,7 +154,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info white">
-                <h4 class="modal-title white">Ubah Nomor Penting</h4>
+                <h4 class="modal-title white">Ubah Pengumuman</h4>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -155,14 +165,20 @@
                     @method("PUT")
                     
                     <div class="form-group">
-                        <label for="">Nama Pengguna</label>
-                        <input type="text" name="name" id="editName" placeholder="Masukkan nama pengguna" class="form-control" required>
+                        <label for="">Judul Pengumuman</label>
+                        <input type="text" name="title" id="editTitle" placeholder="Masukkan Judul Pengumuman" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="">Nomor Telepon</label>
-                        <input type="text" name="phone_number" id="editPhone" placeholder="Masukkan nomor telepon" class="form-control" required>
+                        <label for="">Deskripsi</label>
+                        <input type="text" name="description" id="editDesc" placeholder="Masukkan Deskripsi" class="form-control" required>
                     </div>
-                
+                    <div class="form-group">
+                        <label for="">Status Pengumuman</label>
+                        <select name="status" class="form-control" id="editStatus" required>
+                            <option value="aktif">Aktif</option>
+                            <option value="tidak aktif">Tidak aktif</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Kembali</button>
@@ -211,22 +227,21 @@
             $.ajax(
             {
                 method: "GET",
-                url: "{{ route('important-numbers.index') }}/" + id + "/edit"
+                url: "{{ route('notices.index') }}/" + id + "/edit"
             }).done(function (response)
             {
-                
-                $("#editName").val(response.name);
-                $("#editPhone").val(response.phone_number);
-
+                $("#editTitle").val(response.title);
+                $("#editDesc").val(response.description);
+                $("#editStatus option[value=\"" + response.status + "\"]").attr("selected", true);
                 $("#editModal").modal();
-                $("#editForm").attr("action", "{{ route('important-numbers.index') }}/" + id)
+                $("#editForm").attr("action", "{{ route('notices.index') }}/" + id)
             })
         });
         $(document).on("click", ".deleteButton", function()
         {
             let id = $(this).val();
 
-            $("#deleteForm").attr("action", "{{ route('important-numbers.index') }}/" + id)
+            $("#deleteForm").attr("action", "{{ route('notices.index') }}/" + id)
             $("#deleteModal").modal();
         });
 

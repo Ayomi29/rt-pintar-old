@@ -129,7 +129,7 @@
                 }
             }).done(function(response)
             {
-                console.log(response);
+                
                 if(response != 'email yang anda masukkan salah'){
                     $("#remove-content").remove();
                     $("#add-content").html('<div class="card-body pt-1" id="remove-content"><form class="form-horizontal form-simple" method="POST" action="/confirm-otp-admin">@csrf<fieldset class="form-group position-relative has-icon-left mb-1"><input type="number" name="code" id="code" class="form-control" placeholder="Masukkan code otp" autofocus required><div class="form-control-position"><i class="la la-unlock-alt"></i></div></fieldset><div class="mt-2" id="check_otp"></div><div class="form-group mt-3"><button type="button" id="buttonConfirmOtp" class="btn btn-block btn-info round box-shadow-3">Konfirmasi</div><div class="form-group row"><div class="col-12 text-center"><p>Belum mendapatkan kode otp? <br> <a href="#" class="card-link" onClick="viaEmail()" style="color: #1E9FF2 !important;">Kirim ulang</a></p></div></div></form></div>')
@@ -148,7 +148,7 @@
                             }
                         }).done(function(response)
                         {
-                            console.log(response);
+                            
                             if(response != 'kode otp tidak valid'){
                                 $("#remove-content").remove();
                                 $("#add-content").html('<div class="card-body pt-1" id="remove-content"><form class="form-horizontal form-simple" method="POST" action="/change-password">@csrf<fieldset class="form-group position-relative has-icon-left mb-1"><input type="hidden" name="code" id="getCode"><input type="hidden" name="email" id="getEmail"><input type="password" name="password" id="password" placeholder="Masukkan password" class="form-control" minlength="6" required><div class="form-control-position"><i class="la la-unlock-alt"></i></div></fieldset><div class="form-group mt-3"><button type="submit" id="buttonChangePassword" class="btn btn-block btn-info round box-shadow-3">Simpan</button></div></form></div>');

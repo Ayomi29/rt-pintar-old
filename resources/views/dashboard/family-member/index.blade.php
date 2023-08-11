@@ -4,43 +4,45 @@
 
 @section('style')
 <style>
-  .page-item.active .page-link {
-    color: #FFF !important;
-    background-color: ##1E9FF2 !important;
-    border-color: ##1E9FF2 !important;
-  }
-  .pagination .page-lin {
-    color: blue !important;
-  }
-  
-  .modal-md-lg{
+    .page-item.active .page-link {
+        color: #FFF !important;
+        background-color: ##1E9FF2 !important;
+        border-color: ##1E9FF2 !important;
+    }
+
+    .pagination .page-lin {
+        color: blue !important;
+    }
+
+    .modal-md-lg {
         max-width: 660px !important;
     }
-    .map-on-modal{
+
+    .map-on-modal {
         height: 300px !important;
     }
 </style>
 @endsection
 
 @section('content-header')
-    <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-        <h3 class="content-header-title mb-0 d-inline-block">Manajemen Data Anggota KK</h3>
-        <div class="row breadcrumbs-top d-inline-block">
-            <div class="breadcrumb-wrapper col-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/home">Home</a>
-                    </li>
-                    <li class="breadcrumb-item active">Anggota KK
-                    </li>
-                </ol>
-            </div>
+<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+    <h3 class="content-header-title mb-0 d-inline-block">Manajemen Data Anggota KK</h3>
+    <div class="row breadcrumbs-top d-inline-block">
+        <div class="breadcrumb-wrapper col-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/home">Home</a>
+                </li>
+                <li class="breadcrumb-item active">Anggota KK
+                </li>
+            </ol>
         </div>
     </div>
-    <div class="content-header-right col-md-6 col-12">
-        <div class="btn-group float-md-right">
-            <button class="btn btn-info rounded-0 mb-1" id="createButton" type="button">Tambah</button>
-        </div>
+</div>
+<div class="content-header-right col-md-6 col-12">
+    <div class="btn-group float-md-right">
+        <button class="btn btn-info rounded-0 mb-1" id="createButton" type="button">Tambah</button>
     </div>
+</div>
 @endsection
 
 @section('content')
@@ -77,41 +79,47 @@
                                     <th>Pekerjaan</th>
                                     <th>Pendidikan</th>
                                     <th>Alamat domisili</th>
-                                    <th width="10%">Aksi</th>                                
+                                    <th width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php $no = 1; @endphp
                                 @foreach($family_members as $item)
-                                    <tr>
-                                        <td class="text-capitalize">{{ $no++ }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->family_status }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->family_member_name }}</td>
-                                        <td  style="white-space: nowrap;">{{ $item->nik }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->gender }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->birth_place }}, {{ $item->birth_date }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->marital_status }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->religious }}</td>
-                                        <td class="text-uppercase" style="white-space: nowrap;">{{ $item->citizenship }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->job }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->education }}</td>
-                                        <td class="text-capitalize" style="white-space: nowrap;">{{ $item->address }}</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
-                                                    <i class="la la-cog"></i>
+                                <tr>
+                                    <td class="text-capitalize">{{ $no++ }}</td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{ $item->family_status }}
+                                    </td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{
+                                        $item->family_member_name }}</td>
+                                    <td style="white-space: nowrap;">{{ $item->nik }}</td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{ $item->gender }}</td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{ $item->birth_place }},
+                                        {{ $item->birth_date }}</td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{ $item->marital_status }}
+                                    </td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{ $item->religious }}</td>
+                                    <td class="text-uppercase" style="white-space: nowrap;">{{ $item->citizenship }}
+                                    </td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{ $item->job }}</td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{ $item->education }}</td>
+                                    <td class="text-capitalize" style="white-space: nowrap;">{{ $item->address }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-info dropdown-toggle" type="button"
+                                                data-toggle="dropdown">
+                                                <i class="la la-cog"></i>
+                                            </button>
+                                            <div class="dropdown-menu" style="min-width: 9rem !important">
+                                                <button class="dropdown-item editButton" value="{{ $item->id }}">
+                                                    <i class="la la-edit"></i> Ubah
                                                 </button>
-                                                <div class="dropdown-menu" style="min-width: 9rem !important">         
-                                                    <button class="dropdown-item editButton" value="{{ $item->id }}">
-                                                        <i class="la la-edit"></i> Ubah
-                                                    </button>
-                                                    <button class="dropdown-item deleteButton" value="{{ $item->id }}">
-                                                        <i class="la la-trash"></i> Hapus
-                                                    </button>
-                                                </div>
+                                                <button class="dropdown-item deleteButton" value="{{ $item->id }}">
+                                                    <i class="la la-trash"></i> Hapus
+                                                </button>
                                             </div>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                </tr>
                                 @endforeach
                             </tbody>
                             <tfooter>
@@ -128,7 +136,7 @@
                                     <th>Pekerjaan</th>
                                     <th>Pendidikan</th>
                                     <th>Alamat domisili</th>
-                                    <th width="10%">Aksi</th>                                                  
+                                    <th width="10%">Aksi</th>
                                 </tr>
                             </tfooter>
                         </table>
@@ -153,16 +161,18 @@
                     @csrf
                     <div class="form-group">
                         <label for="">No. KK</label>
-                        <select class="form-control select2" name="family_card_id" style="width: 100% !important;" required>
+                        <select class="form-control select" name="family_card_id" data-searchable="true"
+                            style="width: 100% !important;" required>
                             <option value="" hidden>Pilih</option>
                             @foreach($family_cards as $item)
-                                <option value="{{ $item->id }}">{{ $item->family_card_number }}</option>
+                            <option value="{{ $item->id }}">{{ $item->family_card_number }}</option>
                             @endforeach
                         </select>
+
                     </div>
                     <div class="form-group">
                         <label for="">Status</label>
-                        <select name="family_status" class="form-control" required>
+                        <select name="family_status" data-searchable="true" class="form-control" required>
                             <option value="" hidden>Pilih</option>
                             <option value="kepala keluarga">Kepala keluarga</option>
                             <option value="istri">Istri</option>
@@ -171,11 +181,13 @@
                     </div>
                     <div class="form-group">
                         <label for="">Nama</label>
-                        <input type="text" name="family_member_name" placeholder="Masukkan nama" class="form-control" required>
+                        <input type="text" name="family_member_name" placeholder="Masukkan nama" class="form-control"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="">NIK</label>
-                        <input type="number" name="nik" maxlength="16" placeholder="Masukkan nik" class="form-control" required>
+                        <input type="number" name="nik" maxlength="16" placeholder="Masukkan nik" class="form-control"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="">Jenis kelamin</label>
@@ -187,7 +199,8 @@
                     </div>
                     <div class="form-group">
                         <label for="">Tempat lahir</label>
-                        <input type="text" name="birth_place" placeholder="Masukkan tampat lahir" class="form-control" required>
+                        <input type="text" name="birth_place" placeholder="Masukkan tampat lahir" class="form-control"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="">Tanggal lahir</label>
@@ -231,10 +244,11 @@
                     </div>
                     <div class="form-group">
                         <label for="">Alamat domisili</label>
-                        <textarea name="address" maxlength="120" placeholder="Masukkan alamat domisili" class="form-control"></textarea>
+                        <textarea name="address" maxlength="120" placeholder="Masukkan alamat domisili"
+                            class="form-control"></textarea>
                     </div>
-                    
-                   
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Kembali</button>
@@ -258,7 +272,7 @@
                 <div class="modal-body">
                     @csrf
                     @method("PUT")
-                    
+
                     <div class="form-group">
                         <label for="">Status</label>
                         <select name="family_status" class="form-control" required>
@@ -270,11 +284,13 @@
                     </div>
                     <div class="form-group">
                         <label for="">Nama</label>
-                        <input type="text" id="editFamilyMemberName" name="family_member_name" placeholder="Masukkan nama" class="form-control" required>
+                        <input type="text" id="editFamilyMemberName" name="family_member_name"
+                            placeholder="Masukkan nama" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="">NIK</label>
-                        <input type="number" id="editFamilyMemberNik" name="nik" placeholder="Masukkan nik" class="form-control" required>
+                        <input type="number" id="editFamilyMemberNik" name="nik" placeholder="Masukkan nik"
+                            class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="">Jenis kelamin</label>
@@ -286,11 +302,13 @@
                     </div>
                     <div class="form-group">
                         <label for="">Tempat lahir</label>
-                        <input type="text" id="editFamilyMemberBirthPlace" name="birth_place" placeholder="Masukkan tampat lahir" class="form-control" required>
+                        <input type="text" id="editFamilyMemberBirthPlace" name="birth_place"
+                            placeholder="Masukkan tampat lahir" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="">Tanggal lahir</label>
-                        <input type="date" id="editFamilyMemberBirthDate" name="birth_date" class="form-control" required>
+                        <input type="date" id="editFamilyMemberBirthDate" name="birth_date" class="form-control"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="">Status perkawinan</label>
@@ -322,15 +340,18 @@
                     </div>
                     <div class="form-group">
                         <label for="">Pekerjaan</label>
-                        <input type="string" id="editFamilyMemberJob" name="job" placeholder="Masukkan pekerjaan" class="form-control">
+                        <input type="string" id="editFamilyMemberJob" name="job" placeholder="Masukkan pekerjaan"
+                            class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="">Pendidikan</label>
-                        <input type="text" name="education" id="editFamilyMemberEducation" placeholder="Masukkan pendidikan" class="form-control">
+                        <input type="text" name="education" id="editFamilyMemberEducation"
+                            placeholder="Masukkan pendidikan" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="">Alamat domisili</label>
-                        <textarea name="address" maxlength="120" id="editAddress" placeholder="Masukkan alamat domisili" class="form-control"></textarea>
+                        <textarea name="address" maxlength="120" id="editAddress" placeholder="Masukkan alamat domisili"
+                            class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -366,10 +387,8 @@
 @endsection
 
 @section('script')
-    <script>
-       
-        
-        $(document).on("click", "#createButton", function ()
+<script>
+    $(document).on("click", "#createButton", function ()
         {
             $("#createModal").modal();
         });
@@ -383,7 +402,7 @@
                 url: "{{ route('family-members.index') }}/" + id + "/edit"
             }).done(function (response)
             {
-                console.log(response);
+                
                 $("#editFamilyCardNumber").val(response.family_card.family_card_number);
                 $("#editFamilyMemberName").val(response.family_member_name);
                 $("#editFamilyMemberNik").val(response.nik);
@@ -409,5 +428,5 @@
             $("#deleteModal").modal();
         });
 
-    </script>
+</script>
 @endsection

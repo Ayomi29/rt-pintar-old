@@ -422,11 +422,14 @@ class ApiCoverLetterController extends Controller
             $cover_letter->update([
                 'status' => request('status')
             ]);
-
+            $url_domain = '127.0.0.1:8000';
             if (request('status') == 'diterima') {
-                $file_template = explode("http://127.0.0.1:8000/storage/file/", $cover_letter->file);
+                $data = DataRt::first();
+                $ttd = $data->sign_rt;
+                $ttd_rt = explode($url_domain . "/storage/picture/", $ttd);
+                $file_template = explode($url_domain . "/storage/file/", $cover_letter->file);
                 $document = new TemplateProcessor(storage_path('app/public/file/' . $file_template[1]));
-                $document->setImageValue('image', array('path' => storage_path('app/public/picture/ttd.jpg'), 'width' => 95, 'height' => 75, 'ratio' => false));
+                $document->setImageValue('image', array('path' => storage_path('app/public/picture/' . $ttd_rt[1]), 'width' => 95, 'height' => 75, 'ratio' => false));
                 $name = $cover_letter->title . '.docx';
                 $document->saveAs(storage_path('app/public/file/' . $name));
                 $headers = array(
