@@ -5,6 +5,8 @@ use App\Http\Controllers\ApiComplaintController;
 use App\Http\Controllers\ApiCoverLetterController;
 use App\Http\Controllers\ApiDonationBillController;
 use App\Http\Controllers\ApiDonationController;
+use App\Http\Controllers\ApiFamilyCardController;
+use App\Http\Controllers\ApiFamilyMemberController;
 use App\Http\Controllers\ApiHouseController;
 use App\Http\Controllers\ApiImportantNumberController;
 use App\Http\Controllers\ApiNoticeController;
@@ -43,12 +45,25 @@ Route::group(['prefix' => 'v1', 'middleware' => 'api'], function () {
         Route::post('users', [ApiUserController::class, 'store']);
         Route::get('users/{user}/edit', [ApiUserController::class, 'edit']);
         Route::put('users/{user}', [ApiUserController::class, 'update']);
-        Route::delete('users', [ApiUserController::class, 'delete']);
+        Route::delete('users', [ApiUserController::class, 'destroy']);
         // houses
         Route::get('houses', [ApiHouseController::class, 'index']);
         Route::post('houses', [ApiHouseController::class, 'store']);
         Route::get('houses/{house}/edit', [ApiHouseController::class, 'edit']);
         Route::put('houses/{house}', [ApiHouseController::class, 'update']);
+        // kk
+        Route::get('family-cards', [ApiFamilyCardController::class, 'index']);
+        Route::post('family-cards', [ApiFamilyCardController::class, 'store']);
+        Route::get('family-cards/{family_card}/edit', [ApiFamilyCardController::class, 'edit']);
+        Route::put('family-cards/{family_card}', [ApiFamilyCardController::class, 'update']);
+        Route::delete('family-cards/{family_card}', [ApiFamilyCardController::class, 'destroy']);
+        // family member
+        Route::get('family-members', [ApiFamilyMemberController::class, 'index']);
+        Route::post('family-members', [ApiFamilyMemberController::class, 'store']);
+        Route::get('family-members/{family_member}/edit', [ApiFamilyMemberController::class, 'edit']);
+        Route::put('family-members/{family_member}', [ApiFamilyMemberController::class, 'update']);
+        Route::delete('family-members/{family_member}', [ApiFamilyMemberController::class, 'destroy']);
+
         // profile
         Route::get('profile', [ApiProfileController::class, 'getProfile']);
         Route::post('update-profile', [ApiProfileController::class, 'updateProfile']);
@@ -56,16 +71,27 @@ Route::group(['prefix' => 'v1', 'middleware' => 'api'], function () {
         Route::get('notices', [ApiNoticeController::class, 'index']);
         Route::post('notices', [ApiNoticeController::class, 'store']);
         Route::get('notices/{notice}', [ApiNoticeController::class, 'show']);
+        Route::get('notices/{notice}/edit', [ApiNoticeController::class, 'edit']);
+        Route::put('notices/{notice}', [ApiNoticeController::class, 'update']);
+        Route::delete('notices/{notice}', [ApiNoticeController::class, 'destroy']);
         // panic button
         Route::get('panic-button', [ApiPanicButtonController::class, 'index']);
         Route::post('panic-button', [ApiPanicButtonController::class, 'store']);
         Route::get('panic-button/{id}/close', [ApiPanicButtonController::class, 'close']);
         // nomor penting
         Route::get('important-numbers', [ApiImportantNumberController::class, 'index']);
+        Route::post('important-numbers', [ApiImportantNumberController::class, 'store']);
+        Route::get('important-numbers/{number}/edit', [ApiImportantNumberController::class, 'edit']);
+        Route::put('important-numbers/{number}', [ApiImportantNumberController::class, 'update']);
+        Route::delete('important-numbers/{number}', [ApiImportantNumberController::class, 'destroy']);
         // Iuran
         Route::get('iuran', [ApiDonationController::class, 'index']);
         Route::get('iuran/{donation}', [ApiDonationController::class, 'show']);
         Route::post('iuran/{donation}/bill', [ApiDonationController::class, 'storeBill']);
+        Route::post('iuran', [ApiDonationController::class, 'store']);
+        Route::get('iuran/{donation}/edit', [ApiDonationController::class, 'edit']);
+        Route::put('iuran/{donation}', [ApiDonationController::class, 'update']);
+        Route::delete('iuran/{donation}', [ApiDonationController::class, 'destroy']);
         // Iuran Bill
         Route::get('iuran-bills', [ApiDonationBillController::class, 'index']);
         Route::get('iuran-bills/{id}', [ApiDonationBillController::class, 'show']);

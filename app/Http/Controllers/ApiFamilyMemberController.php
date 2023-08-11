@@ -6,27 +6,31 @@ use App\Models\ActivityHistory;
 use App\Models\FamilyCard;
 use App\Models\FamilyMember;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class FamilyMemberController extends Controller
+class ApiFamilyMemberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $family_members = FamilyMember::orderBy('family_card_id', 'asc')->get();
         $family_cards = FamilyCard::get();
-        return view('dashboard.family-member.index', ['family_cards' => $family_cards, 'family_members' => $family_members]);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mendapatkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'family_members', 'family_cards'), 200);
     }
+
     public function store(Request $request)
     {
         $nik_unavailable = FamilyMember::where('nik', request('nik'))->first();
         if ($nik_unavailable != null) {
-            return redirect()->back()->with("ERR", "NIK tidak dapat digunakan");
+            $status = 'success';
+            $status_code = 200;
+            $message = 'NIK tidak dapat digunakan';
+            return response()->json(compact('status', 'status_code', 'message'), 200);
         }
 
-        FamilyMember::create([
+        $family_member = FamilyMember::create([
             'family_card_id'  => request('family_card_id'),
             'family_member_name' => request('family_member_name'),
             'family_status' => request('family_status'),
@@ -43,27 +47,32 @@ class FamilyMemberController extends Controller
         ]);
 
         ActivityHistory::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => auth('api')->user()->id,
             'description' => 'Tambah anggota keluarga'
         ]);
-
-        return redirect()->back()->with("OK", "Berhasil menambahkan data");
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil menambahkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'family_member'), 200);
     }
 
-
-    public function edit($id)
+    /**
+     * Display the specified resource.
+     */
+    public function edit(FamilyMember $familyMember)
     {
-        $family_member = FamilyMember::with('family_card')->findOrFail($id);
-        return $family_member;
+        $family_member = FamilyMember::with('family_card')->findOrFail($familyMember);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mendapatkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'family_member'), 200);
     }
+
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, FamilyMember $familyMember)
     {
-        $nik_unavailable = FamilyMember::where('nik', request('nik'))->first();
-        if ($nik_unavailable != null) {
-            if ($nik_unavailable->id != $familyMember->id) {
-                return redirect()->back()->with("ERR", "NIK tidak bisa digunakan");
-            }
-        }
         $familyMember->update([
             'family_member_name' => request('family_member_name'),
             'family_status' => request('family_status'),
@@ -77,14 +86,15 @@ class FamilyMemberController extends Controller
             'marital_status' => request('marital_status'),
             'address' => request('address'),
             'job' => request('job'),
-            'status' => request('status')
         ]);
         ActivityHistory::create([
-            'user_id' => Auth::user()->id,
-            'description' => 'Ubah anggota keluarga'
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Ubah data anggota keluarga'
         ]);
-
-        return redirect()->back()->with("OK", "Berhasil mengubah data");
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mengubah data';
+        return response()->json(compact('status', 'status_code', 'message', 'familyMember'), 200);
     }
 
     /**
@@ -92,11 +102,14 @@ class FamilyMemberController extends Controller
      */
     public function destroy(FamilyMember $familyMember)
     {
-        ActivityHistory::create([
-            'user_id' => Auth::user()->id,
-            'description' => 'Hapus anggota keluarga'
-        ]);
         $familyMember->delete();
-        return redirect()->back()->with("OK", "Berhasil menghapus data");
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Hapus data anggota keluarga'
+        ]);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil menghapus data';
+        return response()->json(compact('status', 'status_code', 'message'), 200);
     }
 }

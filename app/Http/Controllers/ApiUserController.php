@@ -82,16 +82,6 @@ class ApiUserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $unavailable_phone_number = User::where('phone_number', request('phone_number'))->first();
-        if ($unavailable_phone_number != null) {
-            if ($user->id != $unavailable_phone_number->id) {
-                $status = 'error';
-                $status_code = 400;
-                $message = 'nomor telepon tidak dapat digunakan';
-                return response()->json(compact('status', 'status_code', 'message'), 400);
-            }
-        }
-
         ActivityHistory::create([
             'user_id' => auth('api')->user()->id,
             'description' => 'Ubah warga'
@@ -127,7 +117,7 @@ class ApiUserController extends Controller
         $user->delete();
         $status = 'success';
         $status_code = 200;
-        $message = 'Berhasil mengubah data';
+        $message = 'Berhasil menghapus data';
         return response()->json(compact('status', 'status_code', 'message', 'user'), 200);
     }
 }

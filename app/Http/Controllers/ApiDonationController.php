@@ -7,6 +7,7 @@ use App\Models\DashboardNotification;
 use App\Models\Donation;
 use App\Models\DonationBill;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ApiDonationController extends Controller
 {
@@ -26,10 +27,81 @@ class ApiDonationController extends Controller
         $data = ['iuran' => $donation];
         return response()->json(compact('status', 'status_code', 'message', 'data'), 200);
     }
+    public function store(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $save = $image->storeAs('public/picture', $image);
+            // $img = url('/') . '/storage/picture/' . $filename2;
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+        $donation = Donation::create([
+            'title' => request('title'),
+            'description' => request('description'),
+            'nominal' => request('nominal'),
+            'image' => $save
+        ]);
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Membuat iuran'
+        ]);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mengubah data';
+        return response()->json(compact('status', 'status_code', 'message', 'donation'), 200);
+    }
+
+    public function edit($iuran)
+    {
+        $donation = Donation::findOrFail($iuran);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mendapatkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'donation'), 200);
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $donation = Donation::find($id);
+        if ($request->image) {
+            $donation->image = $request->file('image');
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            $request->file('image')->store('public/picture');
+            $filename = $request->file('image')->hashName();
+            // $img = url('/') . '/storage/picture/' . $filename;
+            $img = '/storage/picture/' . $filename;
+        }
+        $donation->update([
+            'title' => request('title'),
+            'description' => request('description'),
+            'nominal' => request('nominal'),
+            'image' => $img
+        ]);
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Mengubah data iuran'
+        ]);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mengubah data';
+        return response()->json(compact('status', 'status_code', 'message', 'donation'), 200);
+    }
+
+    public function destroy(Donation $donation)
+    {
+        $donation->delete();
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Menghapus data iuran'
+        ]);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil menghapus data';
+        return response()->json(compact('status', 'status_code', 'message', 'donation'), 200);
+    }
     public function show($id)
     {
         $donation = Donation::findOrFail($id);

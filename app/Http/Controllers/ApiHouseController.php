@@ -73,16 +73,7 @@ class ApiHouseController extends Controller
 
     public function update(Request $request, House $house)
     {
-        $house_number_unavailable = House::where('house_number', request('house_number'))->first();
-        if ($house_number_unavailable != null) {
-            if ($house->id != $house_number_unavailable->id) {
 
-                $status = 'success';
-                $status_code = 400;
-                $message = 'nomor rumah tidak dapat digunakan';
-                return response()->json(compact('status', 'status_code', 'message'), 400);
-            }
-        }
         $house->update([
             'house_number'  => request('house_number'),
             'longitude' => request('longitude'),
@@ -94,7 +85,7 @@ class ApiHouseController extends Controller
         ]);
         $status = 'success';
         $status_code = 200;
-        $message = 'Berhasil mendapatkan data';
+        $message = 'Berhasil mengubah data';
         return response()->json(compact('status', 'status_code', 'message', 'house'), 200);
     }
 }
