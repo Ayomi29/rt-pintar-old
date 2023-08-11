@@ -14,8 +14,15 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
     public function index()
     {
+        $headers = [
+            'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3YxL2xvZ2luLXdhcmdhIiwiaWF0IjoxNjkxNzI0NzUzLCJleHAiOjE2OTE3MjgzNTMsIm5iZiI6MTY5MTcyNDc1MywianRpIjoiNGJZRVk2ZTR6MkZFTGJPVyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.sHD7Oa9BvXfQgBHLxsiQTAOSjuZmdqkzKMJ3ZebK0-E'
+        ];
         $data['year'] = Carbon::now(8)->format('Y');
         if (Auth::user()->roles->role_name == "admin") {
             $data['admin'] = $this->getAdmin();

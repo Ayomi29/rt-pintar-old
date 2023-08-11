@@ -65,8 +65,7 @@ class ApiNoticeController extends Controller
         $status = 'success';
         $status_code = 200;
         $message = 'Berhasil mendapatkan data pengumuman';
-        $data = ['notice' => $notice];
-        return response()->json(compact('status', 'status_code', 'message', 'data'), 200);
+        return response()->json(compact('status', 'status_code', 'message', 'notice'), 200);
     }
 
     public function update(Request $request, Notice $notice)
@@ -92,6 +91,7 @@ class ApiNoticeController extends Controller
             'user_id' => auth('api')->user()->id,
             'description' => 'Menghapus pengumuman'
         ]);
+        $notice->delete();
         $status = 'success';
         $status_code = 200;
         $message = 'Berhasil menghapus pengumuman';

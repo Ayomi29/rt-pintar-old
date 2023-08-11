@@ -111,11 +111,18 @@ Route::group(['prefix' => 'v1', 'middleware' => 'api'], function () {
         Route::post('download-cover-letter-{id}', [ApiCoverLetterController::class, 'downloadCoverLetter']);
         Route::get('pengurus-cover-letter', [ApiCoverLetterController::class, 'indexAdmin']);
         Route::post('pengurus-cover-letter-{id}', [ApiCoverLetterController::class, 'updateStatusCoverLetter']);
-        Route::get('ttd', [ApiCoverLetterController::class, 'ttd']);
+        Route::get('cover-letter/{id}/edit', [ApiCoverLetterController::class, 'edit']);
+        Route::put('cover-letter/{id}', [ApiCoverLetterController::class, 'update']);
+        Route::delete('cover-letter/{id}', [ApiCoverLetterController::class, 'destroy']);
         // polling
         Route::get('polling', [ApiPollingController::class, 'index']);
         Route::get('polling/{id}', [ApiPollingController::class, 'show']);
         Route::post('polling', [ApiPollingController::class, 'store']);
         Route::post('create-polling', [ApiPollingController::class, 'createPolling']);
+        Route::get('polling/{id}/edit', [ApiPollingController::class, 'edit']);
+        Route::put('polling/{id}', [ApiPollingController::class, 'update']);
+        Route::delete('polling/{id}', [ApiPollingController::class, 'destroy']);
+        Route::post('polling/{id}/start', [ApiPollingController::class, 'startPolling']);
+        Route::post('polling/{id}/finish', [ApiPollingController::class, 'finishPolling']);
     });
 });

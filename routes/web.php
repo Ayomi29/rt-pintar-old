@@ -40,9 +40,6 @@ Route::middleware('jwt.auth')->group(function () {
     Route::post('/dashboard-notification-read', [DashboardNotificationController::class, 'update']);
     // Home
     Route::get('home', [HomeController::class, 'index'])->name('home');
-    Route::get('get-data-panic-button', [HomeController::class, 'getDataPanicButton']);
-    Route::get('ubah-status-marker/{id}/edit', [HomeController::class, 'editStatus']);
-    Route::post('ubah-status-marker/{id}', [HomeController::class, 'updateStatus']);
     // manajement data users
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/roles', [RoleController::class, 'index']);

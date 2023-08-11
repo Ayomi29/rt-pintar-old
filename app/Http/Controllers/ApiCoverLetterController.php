@@ -379,6 +379,81 @@ class ApiCoverLetterController extends Controller
         return response()->download($file, $template->title . ".docx");
     }
 
+    public function edit($id)
+    {
+        $notice = CoverLetter::findOrFail($id);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mendapatkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'notice'), 200);
+    }
+    public function update(Request $request, CoverLetter $coverLetter)
+    {
+        $url_domain = '127.0.0.1:8000';
+
+        if (request('status') == 'diterima') {
+            $data = DataRt::first();
+            $ttd = $data->sign_rt;
+            $file_template = explode($url_domain . "/storage/file/", $coverLetter->file);
+            $ttd_rt = explode($url_domain . "/storage/picture/", $ttd);
+            $document = new TemplateProcessor(storage_path('app/public/file/' . $file_template[1]));
+            $document->setImageValue('image', array('path' => storage_path('app/public/picture/' . $ttd_rt[1]), 'width' => 95, 'height' => 75, 'ratio' => false));
+
+            $name = $coverLetter->title . '.docx';
+            $document->saveAs(storage_path('app/public/file/' . $name));
+
+            $headers = array(
+                'Content-Type: application/msword',
+                'Content-Type: vnd.openxmlformats-officedocument.wordprocessingml.document'
+            );
+            // $title_notif = 'Surat anda telah disetujui ';
+            // $body_notif = 'Anda dapat mendownload di riwayat surat';
+        }
+
+        // if (request('status') == 'ditolak') {
+        //     $title_notif = 'Surat anda telah ditolak ';
+        //     $body_notif = 'Silahkan membuat surat baru';
+        // }
+
+        // $notification = 'Tidak ada fcm_token pada user';
+        // $users = User::where('id', $coverLetter->family_member->user_id)->pluck('fcm_token');
+
+        // foreach ($users as $user) {
+        //     if ($user != null) {
+        //         $notification = notify($title_notif, $body_notif)
+        //             ->data([
+        //                 'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+        //                 'title' => $title_notif,
+        //                 'body' => $body_notif
+        //             ])->to($user)->send();
+        //     }
+        // }
+        $coverLetter->update([
+            'status' => request('status'),
+            'description' => request('description')
+        ]);
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => "Ubah status surat"
+        ]);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mengubah status';
+        return response()->json(compact('status', 'status_code', 'message'), 200);
+    }
+    public function destroy(CoverLetter $coverLetter)
+    {
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Menghapus pengumuman'
+        ]);
+        $coverLetter->delete();
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil menghapus pengumuman';
+
+        return response()->json(compact('status', 'status_code', 'message'), 200);
+    }
     public function indexAdmin()
     {
         if (auth('api')->user()->roles->role_name == 'pengurus' || auth('api')->user()->roles->role_name == 'admin') {
@@ -395,24 +470,6 @@ class ApiCoverLetterController extends Controller
             $message = 'Anda bukan pengurus';
             return response()->json(compact('status', 'status_code', 'message'), 400);
         }
-    }
-    public function ttd()
-    {
-        // $ttd = DataRt::where('id', 1)->get()->pluck("sign_rt");
-        // $exp = basename(parse_url($ttd, PHP_URL_PATH));
-
-        $ttd = DataRt::where('id', 1)->get()->pluck("sign_rt");
-        $exp = explode("/", $ttd);
-        $ttd_rt = $exp[5];
-        $status = 'success';
-        $status_code = 200;
-        $message = 'Berhasil mendapatkan data';
-        return response()->json(compact('status', 'status_code', 'message', 'exp', 'ttd', 'ttd_rt'), 200);
-
-        $status = 'success';
-        $status_code = 200;
-        $message = 'Berhasil mendapatkan data';
-        return response()->json(compact('status', 'status_code', 'message', 'ttd', 'filename'), 200);
     }
     public function updateStatusCoverLetter($id)
     {

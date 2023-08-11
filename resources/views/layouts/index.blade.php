@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="Website RT Pintar merupakan website dashboard admin untuk mengelola data - data administrasi RT 15 Perumnas Balikpapan">
-    <meta name="keywords" content="admin, website RT Pintar, dashboard RT Pintar, website rt pintar, dashboard rt pintar, RT 15 Perumnas Balikpapan, rt 15 perumnas balikpapan">
-    
+    <meta name="description"
+        content="Website RT Pintar merupakan website dashboard admin untuk mengelola data - data administrasi RT 15 Perumnas Balikpapan">
+    <meta name="keywords"
+        content="admin, website RT Pintar, dashboard RT Pintar, website rt pintar, dashboard rt pintar, RT 15 Perumnas Balikpapan, rt 15 perumnas balikpapan">
+
     <meta name="_token" content="{{ csrf_token() }}">
     <title>RT Pintar | @yield('title')</title>
     <link rel="shortcut icon" type="image/x-icon" href="/app-assets/logo-02.png">
     <link href="/app-assets/fonts/fonts.css" rel="stylesheet">
     <link href="/app-assets/fonts/line-awesome/css/line-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <!-- BEGIN VENDOR CSS-->
     <link rel="stylesheet" type="text/css" href="/app-assets/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css">
@@ -34,16 +38,17 @@
     <!-- BEGIN Custom CSS-->
     @yield('style')
     <style>
-    .main-menu.menu-light .navigation>li ul li>a {
-        padding: 8px 18px 8px 25px;
-    }
+        .main-menu.menu-light .navigation>li ul li>a {
+            padding: 8px 18px 8px 25px;
+        }
     </style>
     <!-- END Custom CSS-->
 </head>
 
-<body class="vertical-layout vertical-menu-modern 2-columns menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu-modern"
-    data-col="2-columns">
-    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-dark bg-info">
+<body class="vertical-layout vertical-menu-modern 2-columns menu-expanded fixed-navbar" data-open="click"
+    data-menu="vertical-menu-modern" data-col="2-columns">
+    <nav
+        class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-dark bg-info">
         <div class="navbar-wrapper">
             <div class="navbar-header">
                 <ul class="nav navbar-nav flex-row align-item-center">
@@ -75,138 +80,173 @@
                     <ul class="nav navbar-nav mr-auto float-left">
                         <li class="nav-item d-md-none">
                             <a class="nav-link disabled">
-                                @if(Auth::user()->roles->role_name == 'admin')
-                                    {{ Auth::user()->family_member->family_member_name }}
+                                @if(auth('api')->user()->roles->role_name == 'admin')
+                                {{ auth('api')->user()->family_member->family_member_name }}
                                 @endif
                             </a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav float-right">
-                        
-                            <li class="dropdown dropdown-notification nav-item">
-                              <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon ft-bell"></i>
-                                <span class="badge badge-pill badge-default badge-danger badge-default badge-up badge-glow">{{ $dashboard_notification_unread }}</span>
-                              </a>
-                              <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
+
+                        <li class="dropdown dropdown-notification nav-item">
+                            <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i
+                                    class="ficon ft-bell"></i>
+                                <span
+                                    class="badge badge-pill badge-default badge-danger badge-default badge-up badge-glow">{{
+                                    $dashboard_notification_unread }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                                 <li class="dropdown-menu-header">
-                                  <h6 class="dropdown-header m-0">
-                                    <span class="grey darken-2">Notifikasi</span>
-                                  </h6>
-                                  
-                                  <span class="notification-tag badge badge-default badge-danger float-right m-0">{{ $dashboard_notification_unread }} New</span>
-                                </li>   
+                                    <h6 class="dropdown-header m-0">
+                                        <span class="grey darken-2">Notifikasi</span>
+                                    </h6>
+
+                                    <span class="notification-tag badge badge-default badge-danger float-right m-0">{{
+                                        $dashboard_notification_unread }} New</span>
+                                </li>
                                 <li class="scrollable-container media-list w-100">
                                     @foreach($dashboard_notifications as $dashboard_notification)
-                                        @if($dashboard_notification->category == 'Warga')
-                                            <a href="javascript:void(0)" data-redirect="/users" data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
-                                            <div class="media" style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
-                                              <div class="media-left align-self-center"><i class="la la-user icon-bg-circle bg-info"></i></div>
-                                              <div class="media-body">
+                                    @if($dashboard_notification->category == 'Warga')
+                                    <a href="javascript:void(0)" data-redirect="/users"
+                                        data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
+                                        <div class="media"
+                                            style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
+                                            <div class="media-left align-self-center"><i
+                                                    class="la la-user icon-bg-circle bg-info"></i></div>
+                                            <div class="media-body">
                                                 <h6 class="media-heading">
-                                                    {{ $dashboard_notification->category }} 
+                                                    {{ $dashboard_notification->category }}
                                                     @if($dashboard_notification->status == 0)
-                                                        Baru!
+                                                    Baru!
                                                     @endif
                                                 </h6>
-                                                <p class="notification-text font-small-3 text-muted">{{ $dashboard_notification->description }}</p>
+                                                <p class="notification-text font-small-3 text-muted">{{
+                                                    $dashboard_notification->description }}</p>
                                                 <small>
-                                                  <time class="media-meta text-muted">{{ $dashboard_notification->created_at->format('d-m-Y H:i') }}</time>
+                                                    <time class="media-meta text-muted">{{
+                                                        $dashboard_notification->created_at->format('d-m-Y H:i')
+                                                        }}</time>
                                                 </small>
-                                              </div>
                                             </div>
-                                        </a>
-                                        @endif
-                                        @if($dashboard_notification->category == 'Surat pengantar')
-                                            <a href="javascript:void(0)" data-redirect="/cover-letter" data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
-                                            <div class="media" style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
-                                              <div class="media-left align-self-center"><i class="la la-envelope icon-bg-circle bg-info"></i></div>
-                                              <div class="media-body">
+                                        </div>
+                                    </a>
+                                    @endif
+                                    @if($dashboard_notification->category == 'Surat pengantar')
+                                    <a href="javascript:void(0)" data-redirect="/cover-letter"
+                                        data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
+                                        <div class="media"
+                                            style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
+                                            <div class="media-left align-self-center"><i
+                                                    class="la la-envelope icon-bg-circle bg-info"></i></div>
+                                            <div class="media-body">
                                                 <h6 class="media-heading">
-                                                    {{ $dashboard_notification->category }} 
+                                                    {{ $dashboard_notification->category }}
                                                     @if($dashboard_notification->status == 0)
-                                                        Baru!
+                                                    Baru!
                                                     @endif
                                                 </h6>
-                                                <p class="notification-text font-small-3 text-muted">{{ $dashboard_notification->description }}</p>
+                                                <p class="notification-text font-small-3 text-muted">{{
+                                                    $dashboard_notification->description }}</p>
                                                 <small>
-                                                  <time class="media-meta text-muted">{{ $dashboard_notification->created_at->format('d-m-Y H:i') }}</time>
+                                                    <time class="media-meta text-muted">{{
+                                                        $dashboard_notification->created_at->format('d-m-Y H:i')
+                                                        }}</time>
                                                 </small>
-                                              </div>
                                             </div>
-                                        </a>
-                                        @endif
-                                        @if($dashboard_notification->category == 'Aduan warga')
-                                            <a href="javascript:void(0)" data-redirect="/complaint" data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
-                                            <div class="media" style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
-                                              <div class="media-left align-self-center"><i class="la la-bell icon-bg-circle bg-warning"></i></div>
-                                              <div class="media-body">
+                                        </div>
+                                    </a>
+                                    @endif
+                                    @if($dashboard_notification->category == 'Aduan warga')
+                                    <a href="javascript:void(0)" data-redirect="/complaint"
+                                        data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
+                                        <div class="media"
+                                            style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
+                                            <div class="media-left align-self-center"><i
+                                                    class="la la-bell icon-bg-circle bg-warning"></i></div>
+                                            <div class="media-body">
                                                 <h6 class="media-heading">
-                                                    {{ $dashboard_notification->category }} 
+                                                    {{ $dashboard_notification->category }}
                                                     @if($dashboard_notification->status == 0)
-                                                        Baru!
+                                                    Baru!
                                                     @endif
                                                 </h6>
-                                                <p class="notification-text font-small-3 text-muted">{{ $dashboard_notification->description }}</p>
+                                                <p class="notification-text font-small-3 text-muted">{{
+                                                    $dashboard_notification->description }}</p>
                                                 <small>
-                                                  <time class="media-meta text-muted">{{ $dashboard_notification->created_at->format('d-m-Y H:i') }}</time>
+                                                    <time class="media-meta text-muted">{{
+                                                        $dashboard_notification->created_at->format('d-m-Y H:i')
+                                                        }}</time>
                                                 </small>
-                                              </div>
                                             </div>
-                                        </a>
-                                        @endif
-                                        @if($dashboard_notification->category == 'Panik button')
-                                            <a href="javascript:void(0)" data-redirect="/home" data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
-                                            <div class="media" style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
-                                              <div class="media-left align-self-center"><i class="la la-exclamation icon-bg-circle bg-danger"></i></div>
-                                              <div class="media-body">
+                                        </div>
+                                    </a>
+                                    @endif
+                                    @if($dashboard_notification->category == 'Panik button')
+                                    <a href="javascript:void(0)" data-redirect="/home"
+                                        data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
+                                        <div class="media"
+                                            style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
+                                            <div class="media-left align-self-center"><i
+                                                    class="la la-exclamation icon-bg-circle bg-danger"></i></div>
+                                            <div class="media-body">
                                                 <h6 class="media-heading">
-                                                    {{ $dashboard_notification->category }} 
+                                                    {{ $dashboard_notification->category }}
                                                     @if($dashboard_notification->status == 0)
-                                                        Baru!
+                                                    Baru!
                                                     @endif
                                                 </h6>
-                                                <p class="notification-text font-small-3 text-muted">{{ $dashboard_notification->description }}</p>
+                                                <p class="notification-text font-small-3 text-muted">{{
+                                                    $dashboard_notification->description }}</p>
                                                 <small>
-                                                  <time class="media-meta text-muted">{{ $dashboard_notification->created_at->format('d-m-Y H:i') }}</time>
+                                                    <time class="media-meta text-muted">{{
+                                                        $dashboard_notification->created_at->format('d-m-Y H:i')
+                                                        }}</time>
                                                 </small>
-                                              </div>
                                             </div>
-                                        </a>
-                                        @endif
-                                        @if($dashboard_notification->category == 'Bayar Iuran')
-                                            <a href="javascript:void(0)" data-redirect="/iurans" data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
-                                            <div class="media" style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
-                                              <div class="media-left align-self-center"><i class="la la-file-invoice-dollar icon-bg-circle bg-info"></i></div>
-                                              <div class="media-body">
+                                        </div>
+                                    </a>
+                                    @endif
+                                    @if($dashboard_notification->category == 'Bayar Iuran')
+                                    <a href="javascript:void(0)" data-redirect="/iurans"
+                                        data-id="{{ $dashboard_notification->id }}" class="dashboardNotificationRead">
+                                        <div class="media"
+                                            style="{{ $dashboard_notification->status == 1 ? 'background: rgba(236, 240, 241, 0.5) !important;' : '' }}">
+                                            <div class="media-left align-self-center"><i
+                                                    class="la la-file-invoice-dollar icon-bg-circle bg-info"></i></div>
+                                            <div class="media-body">
                                                 <h6 class="media-heading">
-                                                    {{ $dashboard_notification->category }} 
+                                                    {{ $dashboard_notification->category }}
                                                     @if($dashboard_notification->status == 0)
-                                                        Baru!
+                                                    Baru!
                                                     @endif
                                                 </h6>
-                                                <p class="notification-text font-small-3 text-muted">{{ $dashboard_notification->description }}</p>
+                                                <p class="notification-text font-small-3 text-muted">{{
+                                                    $dashboard_notification->description }}</p>
                                                 <small>
-                                                  <time class="media-meta text-muted">{{ $dashboard_notification->created_at->format('d-m-Y H:i') }}</time>
+                                                    <time class="media-meta text-muted">{{
+                                                        $dashboard_notification->created_at->format('d-m-Y H:i')
+                                                        }}</time>
                                                 </small>
-                                              </div>
                                             </div>
-                                        </a>
-                                        @endif
+                                        </div>
+                                    </a>
+                                    @endif
                                     @endforeach
                                 </li>
                                 <li class="dropdown-menu-footer">
-                                    <a class="dropdown-item text-muted text-center" href="javascript:void(0)">Klik untuk membaca
+                                    <a class="dropdown-item text-muted text-center" href="javascript:void(0)">Klik untuk
+                                        membaca
                                     </a>
                                 </li>
-                              </ul>
-                            </li>
-                        
+                            </ul>
+                        </li>
+
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <span class="mr-1">
                                     <span class="user-name text-bold-700">
                                         @if(Auth::user()->admin == true)
-                                            {{ Auth::user()->family_member->family_member_name }}
+                                        {{ Auth::user()->family_member->family_member_name }}
                                         @endif
                                     </span>
                                 </span>
@@ -218,9 +258,10 @@
                                 <form action="/logout" method="POST">
                                     @csrf
                                     <div class="dropdown-item">
-                                        <button type="submit" class="bg-white border border-0"><i class="ft-log-out"></i> Keluar</button>
+                                        <button type="submit" class="bg-white border border-0"><i
+                                                class="ft-log-out"></i> Keluar</button>
                                     </div>
-                                    
+
                                 </form>
                             </div>
                         </li>
@@ -241,91 +282,91 @@
                     </a>
                 </li>
                 @if(Auth::user()->admin == true)
-                    
-                    <li class="nav-item has-sub">
-                        <a href="#">
-                            <i class="las la-users"></i>
-                            <span class="menu-title">Manajemen User</span>    
-                        </a>
-                        <ul class="menu-content" style="">
-                            <li class="nav-item menu-navigasi">
-                                <a href="/roles">
-                                    <span class="menu-title">Role User</span>
-                                </a>
-                            </li>
-                            <li class="nav-item menu-navigasi">
-                                <a href="/users">
-                                    <span class="menu-title">Warga</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    
-                    <li class="nav-item menu-navigasi">
-                        <a href="/data-rts">
-                            <i class="la la-building"></i>
-                            <span class="menu-title">Manajemen Data RT</span>
-                        </a>
-                    </li>   
-                    <li class="nav-item menu-navigasi">
-                        <a href="/important-numbers">
-                            <i class="la la-tty"></i>
-                            <span class="menu-title">Manajemen Nomor Penting</span>
-                        </a>
-                    </li>
-                    <li class="nav-item menu-navigasi">
-                        <a href="/houses">
-                            <i class="la la-home"></i>
-                            <span class="menu-title">Manajemen Data Rumah</span>
-                        </a>
-                    </li>
-                    <li class="nav-item menu-navigasi">
-                        <a href="/family-cards">
-                            <i class="la la-credit-card"></i>
-                            <span class="menu-title">Manajemen Data KK</span>
-                        </a>
-                    </li>
-                    <li class="nav-item menu-navigasi">
-                        <a href="/family-members">
-                            <i class="la la-credit-card"></i>
-                            <span class="menu-title">Manajemen Data Anggota KK</span>
-                        </a>
-                    </li>                    
-                    <li class="nav-item menu-navigasi">
-                        <a href="/notices">
-                            <i class="las la-bullhorn"></i>
-                            <span class="menu-title">Manajemen Pengumuman</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item menu-navigasi">
-                        <a href="/complaints">
-                            <i class="las la-exclamation-triangle"></i>
-                            <span class="menu-title">Manajemen Aduan Warga</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item menu-navigasi">
-                        <a href="/pollings">
-                            <i class="la la-poll"></i>
-                            <span class="menu-title">Manajemen Polling</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item menu-navigasi">
-                        <a href="/cover-letters">
-                            <i class="las la-envelope"></i>
-                            <span class="menu-title">Surat Pengantar</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item menu-navigasi">
-                        <a href="/iurans">
-                            <i class="las la-file-invoice-dollar"></i>
-                            <span class="menu-title">Manajemen Data Iuran</span>
-                        </a>
-                    </li>
-                    
+
+                <li class="nav-item has-sub">
+                    <a href="#">
+                        <i class="las la-users"></i>
+                        <span class="menu-title">Manajemen User</span>
+                    </a>
+                    <ul class="menu-content" style="">
+                        <li class="nav-item menu-navigasi">
+                            <a href="/roles">
+                                <span class="menu-title">Role User</span>
+                            </a>
+                        </li>
+                        <li class="nav-item menu-navigasi">
+                            <a href="/users">
+                                <span class="menu-title">Warga</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item menu-navigasi">
+                    <a href="/data-rts">
+                        <i class="la la-building"></i>
+                        <span class="menu-title">Manajemen Data RT</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-navigasi">
+                    <a href="/important-numbers">
+                        <i class="la la-tty"></i>
+                        <span class="menu-title">Manajemen Nomor Penting</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-navigasi">
+                    <a href="/houses">
+                        <i class="la la-home"></i>
+                        <span class="menu-title">Manajemen Data Rumah</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-navigasi">
+                    <a href="/family-cards">
+                        <i class="la la-credit-card"></i>
+                        <span class="menu-title">Manajemen Data KK</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-navigasi">
+                    <a href="/family-members">
+                        <i class="la la-credit-card"></i>
+                        <span class="menu-title">Manajemen Data Anggota KK</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-navigasi">
+                    <a href="/notices">
+                        <i class="las la-bullhorn"></i>
+                        <span class="menu-title">Manajemen Pengumuman</span>
+                    </a>
+                </li>
+
+                <li class="nav-item menu-navigasi">
+                    <a href="/complaints">
+                        <i class="las la-exclamation-triangle"></i>
+                        <span class="menu-title">Manajemen Aduan Warga</span>
+                    </a>
+                </li>
+
+                <li class="nav-item menu-navigasi">
+                    <a href="/pollings">
+                        <i class="la la-poll"></i>
+                        <span class="menu-title">Manajemen Polling</span>
+                    </a>
+                </li>
+
+                <li class="nav-item menu-navigasi">
+                    <a href="/cover-letters">
+                        <i class="las la-envelope"></i>
+                        <span class="menu-title">Surat Pengantar</span>
+                    </a>
+                </li>
+
+                <li class="nav-item menu-navigasi">
+                    <a href="/iurans">
+                        <i class="las la-file-invoice-dollar"></i>
+                        <span class="menu-title">Manajemen Data Iuran</span>
+                    </a>
+                </li>
+
                 @endif
             </ul>
         </div>
@@ -335,7 +376,7 @@
     <div class="app-content content">
         <div class="content-wrapper">
             <div class="content-header row mb-3">
-                    @yield('content-header')
+                @yield('content-header')
             </div>
             <div class="content-body">
                 @yield('content')
@@ -347,7 +388,8 @@
     <footer class="footer footer-static footer-light navbar-border navbar-shadow">
         <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">
             <span class="float-md-left d-block d-md-inline-block">Copyright &copy; 2023
-                <a class="text-bold-800 grey darken-2" href="" target="_blank">RT Pintar</a>, All rights reserved. </span>
+                <a class="text-bold-800 grey darken-2" href="" target="_blank">RT Pintar</a>, All rights reserved.
+            </span>
             <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">Hand-crafted & Made with
                 <i class="ft-heart pink"></i>
             </span>
@@ -379,16 +421,16 @@
     <!-- END MODERN JS-->
     <!-- BEGIN PAGE LEVEL JS-->
     @if(session('OK'))
-        <script>
-            toastr.success('{{ session("OK") }}', 'Success!');
+    <script>
+        toastr.success('{{ session("OK") }}', 'Success!');
             toastr.success('{{ session("success") }}', 'Success!');
-        </script>
+    </script>
     @endif
     @if(session('ERR'))
-        <script>
-            toastr.error('{{ session("ERR") }}', 'Error!');
+    <script>
+        toastr.error('{{ session("ERR") }}', 'Error!');
             toastr.error('{{ session("error") }}', 'Error!');
-        </script>
+    </script>
     @endif
     <script>
         let apiBaseUrl = "{{ url('/') }}/api";
@@ -440,7 +482,7 @@
         
     </script>
     <script type="text/javascript">
-      var togglePassword = document.querySelector('#togglePassword');
+        var togglePassword = document.querySelector('#togglePassword');
       var password = document.querySelector('#password');
     
       togglePassword.addEventListener('click', function (e) {
@@ -451,7 +493,7 @@
         this.classList.toggle('la-eye');
         this.classList.toggle('la-eye-slash');
       });
-      </script>
+    </script>
     @yield('script')
     <!-- END PAGE LEVEL JS-->
 

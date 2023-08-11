@@ -130,4 +130,77 @@ class ApiPollingController extends Controller
             return response()->json(compact('status', 'status_code', 'message', 'data'));
         }
     }
+    public function edit($id)
+    {
+        $polling = Polling::with('polling_option')->where('id', $id)->first();
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mendapatkan data';
+        return response()->json(compact('status', 'status_code', 'message', 'polling'));
+    }
+    public function update($id)
+    {
+        $polling = Polling::with('polling_option')->findOrFail($id);
+        $polling_option = PollingOption::where('polling_id', $polling->id);
+        $polling_option->delete();
+
+        $polling->update([
+            'title' => request('title'),
+            'description' => request('description')
+        ]);
+        $polling_option = request('option_name');
+        for ($i = 0; $i < count($polling_option); $i++) {
+            PollingOption::create([
+                'polling_id' => $polling->id,
+                'option_name' => $polling_option[$i]
+            ]);
+        }
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Ubah polling'
+        ]);
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mengubah data';
+        return response()->json(compact('status', 'status_code', 'message', 'polling'));
+    }
+    public function destroy(Polling $polling)
+    {
+        $polling->delete();
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Hapus polling'
+        ]);
+
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil menghapus data';
+        return response()->json(compact('status', 'status_code', 'message'));
+    }
+    public function startPolling(Polling $polling)
+    {
+        $polling->update(['status' => 'start']);
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Mulai polling'
+        ]);
+
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil memulai polling';
+        return response()->json(compact('status', 'status_code', 'message'));
+    }
+    public function finishPolling(Polling $polling)
+    {
+        $polling->update(['status' => 'finish']);
+        ActivityHistory::create([
+            'user_id' => auth('api')->user()->id,
+            'description' => 'Akhiri polling'
+        ]);
+
+        $status = 'success';
+        $status_code = 200;
+        $message = 'Berhasil mengakhiri polling';
+        return response()->json(compact('status', 'status_code', 'message'));
+    }
 }

@@ -66,6 +66,7 @@ class ApiAuthenticationController extends Controller
         }
     }
 
+
     public function register()
     {
         if (request('password') == null || request('password') == '' || request('phone_number') == null || request('phone_number') == '' || request('family_member_id') == null || request('family_member_id') == '') {
