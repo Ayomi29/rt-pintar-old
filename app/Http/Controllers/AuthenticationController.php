@@ -91,8 +91,8 @@ class AuthenticationController extends Controller
         $usedEmail->update([
             'password' => bcrypt(request('password'))
         ]);
-        $usedCode = OtpCode::where('user_id', $usedEmail->id)->first();
-        $usedCode->delete();
+        // $usedCode = OtpCode::where('user_id', $usedEmail->id)->first();
+        // $usedCode->delete();
 
         return redirect()->route('login')->with('OK', 'Berhasil mengubah password');
     }
