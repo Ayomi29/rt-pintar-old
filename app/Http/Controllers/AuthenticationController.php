@@ -6,8 +6,10 @@ use App\Mail\ResetPasswordSendEmailAdmin;
 use App\Models\ActivityHistory;
 use App\Models\OtpCode;
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class AuthenticationController extends Controller
@@ -19,23 +21,19 @@ class AuthenticationController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'phone_number' => ['required'],
-            'password' => ['required'],
+        
+        $email = $request->email;
+        $password = $request->password;
+        $url = 'http://127.0.0.1:8000/api/v1/login-warga';
+        $req = Http::post($url, [
+            'phone_number'=> $email,
+            'password'=> $password
         ]);
-        if (Auth::attempt($credentials)) {
-            if (Auth::user()->roles->role_name == 'admin') {
-
-                $request->session()->regenerate();
-
-                return redirect()->intended('/home');
-            } elseif (Auth::user()->roles->role_name != 'admin') {
-                return redirect()->back()->with('ERR', 'Anda tidak memiliki hak akses admin!!!');
-            }
-        }
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        $response = $req->json();
+        $token = $response->token;
+    
+        dd($token);
+        return redirect()->intended('/home');
     }
 
     public function logout(Request $request)

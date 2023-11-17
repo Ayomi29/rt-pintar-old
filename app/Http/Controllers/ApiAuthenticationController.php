@@ -7,6 +7,7 @@ use App\Models\DashboardNotification;
 use App\Models\FamilyCard;
 use App\Models\FamilyMember;
 use App\Models\OtpCode;
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Validated;
@@ -308,7 +309,6 @@ class ApiAuthenticationController extends Controller
                 }
 
                 ActivityHistory::create([
-                    'rukun_tetangga_id' => $user->family_member->family_card->house->rukun_tetangga_id,
                     'user_id' => $user->id,
                     'description' => 'Login warga'
                 ]);
@@ -318,11 +318,17 @@ class ApiAuthenticationController extends Controller
                 ]);
                 // $this->setFcmToken($user->id);
                 $token = auth('api')->fromUser($user);
-
+                $role = Role::where('user_id', $user->id)->first();
+                if ($role == null) {
+                    $role = 'warga';
+                }
                 $status = 'success';
                 $status_code = 200;
                 $message = 'Berhasil login';
-                $data = ['user' => $user];
+                $user->with(['family_member']);
+                $data = [
+                    'role' => $role,
+                    'user' => $user];
                 $token_type = 'bearer';
                 $tokenTTL = auth('api')->factory()->getTTL() * 60;
                 $expires_in = Carbon::now()->addSeconds($tokenTTL);
